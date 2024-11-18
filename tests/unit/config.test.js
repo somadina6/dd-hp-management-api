@@ -23,7 +23,7 @@ describe("Config Module", () => {
   });
 
   it("should return the correct environment from NODE_ENV", () => {
-     process.env.NODE_ENV = "production";
+    process.env.NODE_ENV = "production";
     const config = require("../../src/config/config");
     expect(config.env).toBe("production");
   });

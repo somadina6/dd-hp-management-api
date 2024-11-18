@@ -94,7 +94,11 @@ describe("Character Service", () => {
 
       await expect(
         characterService.getCharacterStatus("nonexistent.json")
-      ).rejects.toThrow(CharacterNotFoundError);
+      ).rejects.toEqual(
+        new CharacterNotFoundError(
+          "Character file nonexistent.json not found or invalid"
+        )
+      );
     });
   });
 
@@ -126,6 +130,21 @@ describe("Character Service", () => {
       expect(result.currentHP).toBe(15); // Half damage due to resistance
     });
 
+    it("should throw error for damge type undefined", async () => {
+      await expect(
+        characterService.dealDamage("briv.json", 10, undefined)
+      ).rejects.toThrow(ValidationError);
+      await expect(
+        characterService.dealDamage("briv.json", 10, "")
+      ).rejects.toEqual(new ValidationError("Damage type must be provided"));
+    });
+
+    it("should throw error for missing damage type", async () => {
+      await expect(
+        characterService.dealDamage("briv.json", 10)
+      ).rejects.toEqual(new ValidationError("Damage type must be provided"));
+    });
+
     it("should throw error for invalid damage type", async () => {
       await expect(
         characterService.dealDamage("briv.json", 10, "invalidType")
@@ -135,7 +154,9 @@ describe("Character Service", () => {
     it("should throw error for invalid damage amount", async () => {
       await expect(
         characterService.dealDamage("briv.json", -5, "piercing")
-      ).rejects.toThrow(ValidationError);
+      ).rejects.toEqual(
+        new ValidationError("Damage amount must be a positive number")
+      );
     });
 
     it("should handle damage with temporary HP", async () => {
@@ -168,8 +189,21 @@ describe("Character Service", () => {
     });
 
     it("should throw error for invalid heal amount", async () => {
-      await expect(characterService.heal("briv.json", -5)).rejects.toThrow(
-        ValidationError
+      await expect(characterService.heal("briv.json", -5)).rejects.toEqual(
+        new ValidationError("Heal amount must be a positive number")
+      );
+    });
+
+    it("should handle string input for heal amount", async () => {
+      const result = await characterService.heal("briv.json", "5");
+      expect(result.currentHP).toBe(10);
+    });
+
+    it("shouldthrow error for invalid string input", async () => {
+      await expect(
+        characterService.heal("briv.json", "invalid")
+      ).rejects.toEqual(
+        new ValidationError("Heal amount must be a positive number")
       );
     });
   });

@@ -1,3 +1,3 @@
 beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  jest.clearAllMocks();
+});
