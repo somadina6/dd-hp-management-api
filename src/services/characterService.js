@@ -97,8 +97,8 @@ const characterService = {
    * @throws {ValidationError} If heal amount is invalid
    */
   async heal(filename, amount) {
-    if (typeof amount === "string") {
-      amount = Number(amount);
+    if (typeof amount !== "number") {
+      throw new ValidationError("Heal amount must be a number");
     }
 
     if (!amount || amount <= 0) {
@@ -117,6 +117,11 @@ const characterService = {
    * @throws {ValidationError} If temporary HP amount is invalid
    */
   async addTemporaryHP(filename, amount) {
+
+    if (typeof amount !== "number") {
+      throw new ValidationError("Temporary HP amount must be a number");
+    }
+    
     if (!amount || amount <= 0) {
       throw new ValidationError(
         "Temporary HP amount must be a positive number"

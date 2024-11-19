@@ -194,16 +194,17 @@ describe("Character Service", () => {
       );
     });
 
-    it("should handle string input for heal amount", async () => {
-      const result = await characterService.heal("briv.json", "5");
-      expect(result.currentHP).toBe(10);
+    it("should throw error for numbers as strings", async () => {
+      await expect(characterService.heal("briv.json", "5")).rejects.toEqual(
+        new ValidationError("Heal amount must be a number")
+      );
     });
 
-    it("shouldthrow error for invalid string input", async () => {
+    it("should throw error for invalid string input", async () => {
       await expect(
         characterService.heal("briv.json", "invalid")
       ).rejects.toEqual(
-        new ValidationError("Heal amount must be a positive number")
+        new ValidationError("Heal amount must be a number")
       );
     });
   });
@@ -227,7 +228,13 @@ describe("Character Service", () => {
     it("should throw error for invalid temporary HP amount", async () => {
       await expect(
         characterService.addTemporaryHP("briv.json", -5)
-      ).rejects.toThrow(ValidationError);
+      ).rejects.toEqual(new ValidationError("Temporary HP amount must be a positive number"));
+    });
+
+    it("should throw error for numbers as strings", async () => {
+      await expect(
+        characterService.addTemporaryHP("briv.json", "5")
+      ).rejects.toEqual(new ValidationError("Temporary HP amount must be a number"));
     });
   });
 
