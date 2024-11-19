@@ -1,7 +1,6 @@
 const request = require("supertest");
 const app = require("../../src/app");
 const characterService = require("../../src/services/characterService");
-const e = require("express");
 
 describe("Character API Integration Tests", () => {
   beforeEach(async () => {
