@@ -88,7 +88,7 @@ This endpoint heals a specific character by a certain amount.
 ## POST: Add Temporary HP To Character
 
 **Endpoint**:  
-`POST http://localhost:3000/character/briv.json/temporary-hp`
+`POST http://localhost:3000/character/{{filename}}/temporary-hp`
 
 This endpoint updates the temporary hit points (HP) of a character.
 
